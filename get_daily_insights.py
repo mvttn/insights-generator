@@ -32,7 +32,7 @@ def get_daily_insights():
     - Strategies to “push the needle forward”
 
     # Reflection
-    Generate a relevant journaling prompt to help reflect on today's productivity and mindset.
+    Generate 3 relevant journaling prompts. 1. Planning/Productivity 2. Gratitude/Mindset 3. Emotions/Experiences/Thoughts/Memories.
 
     ## Output Format with Examples:
     ```json
@@ -48,8 +48,12 @@ def get_daily_insights():
         "lessons_learned": ["Break larger tasks into smaller actionable steps"],
         "next_steps": ["Prioritize Task A first thing tomorrow", "Set 25-minute focused work intervals"],
         "motivation": "Completing tasks today builds momentum for tomorrow",
-        "affirmation": "You are making steady progress towards your goals"
-        "journaling_prompt": "What strategies helped you stay focused today, and how can you apply them tomorrow?"
+        "affirmation": "You are making steady progress towards your goals",
+        "journaling_prompts": [
+            "What strategies helped you stay focused today, and how can you apply them tomorrow?",
+            "What are you grateful for today?",
+            "How did you feel emotionally throughout the day, and what memories stood out?"
+        ]
     }
     """
     reminders = retrieve_reminders()

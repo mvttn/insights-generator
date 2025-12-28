@@ -27,6 +27,16 @@ def paragraph(text):
         "paragraph": {"rich_text": [{"text": {"content": text}}]}
     }
 
+def callout(text):
+    return {
+        "object": "block",
+        "type": "callout",
+        "callout": {
+            "rich_text": [{"text": {"content": text}}],
+            "icon": {"type": "emoji", "emoji": "💡"}
+        }
+    }
+
 def bullet(text):
     return {
         "object": "block",
@@ -56,8 +66,11 @@ blocks = []
 
 blocks.append(title("📅 " + insights["date"]))
 
-blocks.append(heading("📝 Today's Journaling Prompt"))
-blocks.append(paragraph(insights["journaling_prompt"]))
+blocks.append(heading("📝 Today's Journaling Prompts"))
+for prompt in insights["journaling_prompts"]:
+    blocks.append(callout(prompt))
+
+blocks.append(divider())
 
 blocks.append(heading("🧠 Summary"))
 blocks.append(paragraph(insights["summary"]))
