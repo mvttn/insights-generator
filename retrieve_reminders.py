@@ -1,80 +1,76 @@
 from Foundation import NSRunLoop, NSDate # type: ignore 
 from EventKit import EKEventStore, EKEntityTypeReminder  # type: ignore
 
-TARGET_LIST = "TO DO"
+def retrieve_reminders(TARGET_LIST="TO DO"):
+    store = EKEventStore.alloc().init()
+    granted = False
+    done = False
 
-store = EKEventStore.alloc().init()
+    def access_handler(_granted, _error):
+        nonlocal granted, done
+        granted = _granted
+        done = True
 
-granted = False
-done = False
+    def clear_completed_reminders(reminders):
+        for r in reminders:
+            if r.isCompleted():
+                store.removeReminder_commit_error_(r, True, None)
+        
 
-def access_handler(_granted, _error):
-    global granted, done
-    granted = _granted
-    done = True
-
-def clear_completed_reminders(reminders):
-    for r in reminders:
-        if r.isCompleted():
-            store.removeReminder_commit_error_(r, True, None)
-    
-
-store.requestAccessToEntityType_completion_(
-    EKEntityTypeReminder,
-    access_handler
-)
-
-while not done:
-    NSRunLoop.currentRunLoop().runUntilDate_(
-        NSDate.dateWithTimeIntervalSinceNow_(0.1)
+    store.requestAccessToEntityType_completion_(
+        EKEntityTypeReminder,
+        access_handler
     )
 
-if not granted:
-    raise SystemExit("Reminders access denied")
+    while not done:
+        NSRunLoop.currentRunLoop().runUntilDate_(
+            NSDate.dateWithTimeIntervalSinceNow_(0.1)
+        )
 
-calendar = None
-for cal in store.calendarsForEntityType_(EKEntityTypeReminder):
-    if cal.title() == TARGET_LIST:
-        calendar = cal
-        break
+    if not granted:
+        raise SystemExit("Reminders access denied")
 
-if not calendar:
-    raise SystemExit(f"List '{TARGET_LIST}' not found")
+    calendar = None
+    for cal in store.calendarsForEntityType_(EKEntityTypeReminder):
+        if cal.title() == TARGET_LIST:
+            calendar = cal
+            break
 
-predicate = store.predicateForRemindersInCalendars_([calendar])
+    if not calendar:
+        raise SystemExit(f"List '{TARGET_LIST}' not found")
 
-done = False
-reminders = []
+    predicate = store.predicateForRemindersInCalendars_([calendar])
 
-def fetch_handler(_reminders):
-    global reminders, done
-    reminders = _reminders or []
-    done = True
+    done = False
+    reminders = []
 
-store.fetchRemindersMatchingPredicate_completion_(
-    predicate,
-    fetch_handler
-)
+    def fetch_handler(_reminders):
+        nonlocal reminders, done
+        reminders = _reminders or []
+        done = True
 
-while not done:
-    NSRunLoop.currentRunLoop().runUntilDate_(
-        NSDate.dateWithTimeIntervalSinceNow_(0.1)
+    store.fetchRemindersMatchingPredicate_completion_(
+        predicate,
+        fetch_handler
     )
 
+    while not done:
+        NSRunLoop.currentRunLoop().runUntilDate_(
+            NSDate.dateWithTimeIntervalSinceNow_(0.1)
+        )
 
-with open("reminders_output.txt", "w") as f: 
-    f.write("[\n")
+
+    reminders_list = []
     for r in reminders:
         title = r.title()
         completed = r.isCompleted()
         due = r.dueDateComponents()
 
         due_str = (
-        f"{due.year()}-{due.month():02d}-{due.day():02d}"
-        if due else "None"
-    )
+            f"{due.year()}-{due.month():02d}-{due.day():02d}"
+            if due else "None"
+        )
+        reminders_list.append(f"{title} | Completed: {completed} | Due: {due_str}")
 
-        f.write(f"{title} | Completed: {completed} | Due: {due_str},\n")
-    f.write("]\n")
-
-clear_completed_reminders(reminders)
+    clear_completed_reminders(reminders)
+    return "\n".join(reminders_list)
