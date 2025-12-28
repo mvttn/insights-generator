@@ -63,7 +63,7 @@ blocks.append(divider())
 
 blocks.append(heading("📊 Performance"))
 blocks.append(paragraph(f"Completion rate: {insights['completion_rate']}%"))
-blocks.append(paragraph(f"Efficiency: {insights['efficiency']}%"))
+blocks.append(paragraph(f"Efficiency: {insights['efficiency']}"))
 
 
 blocks.append(divider())
