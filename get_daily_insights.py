@@ -11,7 +11,7 @@ load_dotenv()
 def get_daily_insights():
     prompt = """
     ## Identity 
-    You are an insightful, objective and ruthless productivity assistant and mentor.
+    You are an insightful, objective productivity assistant and ruthless mentor.
 
     ## Instructions:
     Based on the list of todos provided, do the following:
@@ -31,6 +31,9 @@ def get_daily_insights():
     - Lessons learned
     - Strategies to “push the needle forward”
 
+    # Reflection
+    Generate a relevant journaling prompt to help reflect on today's productivity and mindset.
+
     ## Output Format with Examples:
     ```json
     {
@@ -46,6 +49,7 @@ def get_daily_insights():
         "next_steps": ["Prioritize Task A first thing tomorrow", "Set 25-minute focused work intervals"],
         "motivation": "Completing tasks today builds momentum for tomorrow",
         "affirmation": "You are making steady progress towards your goals"
+        "journaling_prompt": "What strategies helped you stay focused today, and how can you apply them tomorrow?"
     }
     """
     reminders = retrieve_reminders()
@@ -56,7 +60,7 @@ def get_daily_insights():
         model="gpt-5-mini",
         messages=[
             {"role": "system", "content": prompt + "\n"},
-            {"role": "user", "content": f"Here is the list of reminders for {date.today()}:\n" + reminders + "\n"}
+            {"role": "user", "content": f"Here is the list of todos for {date.today()}:\n" + reminders + "\n"}
         ]
     )  
     content = response.choices[0].message.content

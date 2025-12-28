@@ -56,6 +56,9 @@ blocks = []
 
 blocks.append(title("📅 " + insights["date"]))
 
+blocks.append(heading("📝 Today's Journaling Prompt"))
+blocks.append(paragraph(insights["journaling_prompt"]))
+
 blocks.append(heading("🧠 Summary"))
 blocks.append(paragraph(insights["summary"]))
 
