@@ -3,7 +3,7 @@ import json
 
 def get_daily_insights():
     client = OpenAI() 
-    with open("prompt.txt", "r") as f:
+    with open("prompt.md", "r") as f:
         prompt = f.read()
 
     with open("reminders_output.txt", "r") as f:
@@ -17,10 +17,8 @@ def get_daily_insights():
             {"role": "user", "content": "Here is the list of reminders:\n" + reminders + "\n"}
         ]
     )  
-
-    print(response.choices[0].message.content)
     content = response.choices[0].message.content
     if content is None:
         raise ValueError("No content returned from OpenAI response.")
-    return json.loads(content)
 
+    return json.loads(content)
