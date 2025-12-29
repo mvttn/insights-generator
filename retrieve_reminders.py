@@ -1,5 +1,6 @@
 from Foundation import NSRunLoop, NSDate # type: ignore 
 from EventKit import EKEventStore, EKEntityTypeReminder  # type: ignore
+from datetime import date
 
 def retrieve_reminders(TARGET_LIST="TO DO"):
     store = EKEventStore.alloc().init()
@@ -65,7 +66,10 @@ def retrieve_reminders(TARGET_LIST="TO DO"):
         title = r.title()
         completed = r.isCompleted()
         due = r.dueDateComponents()
-
+        if due and due.year() and due.month() and due.day():
+            due_date = date(due.year(), due.month(), due.day())
+            if due_date > date.today():
+                continue  # Skip future reminders
         due_str = (
             f"{due.year()}-{due.month():02d}-{due.day():02d}"
             if due else "None"
