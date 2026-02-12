@@ -17,8 +17,9 @@ def get_daily_insights():
     Based on the list of todos provided, do the following:
 
     # Performance Assessment
+    - **Task Evaluation:** Give tasks a score of 1-10 based on their importance and impact. High value tasks should be prioritized.
     - **Completion Rate:** Calculate the percentage of tasks completed vs total tasks.
-    - **Efficiency:** Reflect on how well time and focus were managed. High value tasks versus lower important tasks.
+    - **Efficiency:** Reflect on how well time and focus were managed. High value tasks should be weighted higher versus less important tasks.
 
     # Motivation & Action Plan
     - **Next Steps:** List 1-3 actionable steps for tomorrow to increase completion and progress.
@@ -34,12 +35,17 @@ def get_daily_insights():
     # Reflection
     Generate 3 relevant journaling prompts. 1. Planning/Productivity 2. Gratitude/Mindset 3. Emotions/Experiences/Thoughts/Memories.
 
-    ## Output Format with Examples:
+    ## Strict Output Format Example - YOU MUST FOLLOW THIS EXACT FORMAT:
     ```json
     {
         "date": "SUN (28.12.25)", 
         "completed_tasks": ["Task 1", "Task 2", "Task 3"],
         "incomplete_tasks": ["Task A", "Task B"],
+        "task_evaluation": {
+            "Task 1": 8,
+            "Task 2": 9,
+            "Task 3": 7
+            },
         "completion_rate": 60,
         "efficiency": "You were very efficient with your time today. You completed 2 high value tasks.",
         "summary": "Today, 3 out of 5 tasks were completed, demonstrating focus and progress, while incomplete tasks highlight areas for better time management. Key actions for tomorrow are clearly identified to maintain momentum.",

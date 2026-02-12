@@ -1,3 +1,4 @@
+import json
 import os 
 from notion_client import Client
 from dotenv import load_dotenv
@@ -78,6 +79,7 @@ blocks.append(paragraph(insights["summary"]))
 blocks.append(divider())
 
 blocks.append(heading("📊 Performance"))
+blocks.append(paragraph(f"Task Evaluation: {json.dumps(insights['task_evaluation'], indent=2)}"))
 blocks.append(paragraph(f"Completion rate: {insights['completion_rate']}%"))
 blocks.append(paragraph(f"Efficiency: {insights['efficiency']}"))
 
